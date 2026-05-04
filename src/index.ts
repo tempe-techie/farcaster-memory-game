@@ -8,7 +8,8 @@ import {
 } from "@farcaster/snap";
 import { registerSnapHandler } from "@farcaster/snap-hono";
 
-const SNAP_PATH = "/";
+const HOME_PATH = "/";
+const SNAP_PATH = "/memory-game";
 
 const ROWS = 4;
 const COLS = 4;
@@ -66,6 +67,50 @@ type GameState = {
   m: number;
   r: number[];
   t0: number | null;
+};
+
+const homeSnap: SnapFunction = async (ctx) => {
+  const base = snapBaseUrlFromRequest(ctx.request);
+
+  const elements: Record<string, SnapElementInput> = {
+    page: {
+      type: "stack",
+      props: { gap: "md" },
+      children: ["welcome", "intro", "start-btn"],
+    },
+    welcome: {
+      type: "text",
+      props: {
+        content: "How good is your Farcaster memory?",
+        weight: "bold",
+        size: "lg",
+        align: "center",
+      },
+    },
+    intro: {
+      type: "text",
+      props: {
+        content: 'Click the "Start" button to test it out!',
+        align: "center",
+      },
+    },
+    "start-btn": {
+      type: "button",
+      props: { label: "Start", variant: "primary" },
+      on: {
+        press: {
+          action: "open_snap",
+          params: { target: `${base}${SNAP_PATH}` },
+        },
+      },
+    },
+  };
+
+  return {
+    version: SPEC_VERSION,
+    theme: { accent: "purple" },
+    ui: { root: "page", elements },
+  };
 };
 
 const memoryGameSnap: SnapFunction = async (ctx) => {
@@ -446,6 +491,11 @@ const ogFonts = [
   { path: join(fontsDir, "inter-latin-400-normal.woff"), weight: 400 as const },
   { path: join(fontsDir, "inter-latin-700-normal.woff"), weight: 700 as const },
 ];
+
+registerSnapHandler(app, homeSnap, {
+  path: HOME_PATH,
+  og: { fonts: ogFonts },
+});
 
 registerSnapHandler(app, memoryGameSnap, {
   path: SNAP_PATH,
