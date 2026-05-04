@@ -30,7 +30,7 @@ const WORDS = [
   "cassie",
   "limone",
   "nouns",
-  "tempe techie",
+  "tempe",
   "farcon",
   "beeper",
   "urbe",
@@ -42,11 +42,11 @@ const WORDS = [
   "tekrox",
   "yerbearserker",
   "noc",
-  "fattybuthappy",
+  "fatty",
   "nikolaii",
   "adrienne",
   "cryptogallo",
-  "justin ahn",
+  "justinahn",
   "arjantupan",
   "chaps",
   "yes2crypto",
@@ -57,7 +57,8 @@ const WORDS = [
   "rome",
   "bankr",
   "higher",
-  "purple"
+  "purple",
+  "deca"
 ] as const;
 
 
