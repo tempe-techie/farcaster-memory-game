@@ -1,0 +1,34 @@
+steps:
+  # 1. Install dependencies
+  - name: node:22
+    entrypoint: npm
+    args: ["ci"]
+    volumes:
+      - name: npm-cache
+        path: /root/.npm
+
+  # 2. Type-check
+  - name: node:22
+    entrypoint: npm
+    args: ["run", "typecheck"]
+    volumes:
+      - name: npm-cache
+        path: /root/.npm
+
+  # 3. Compile TypeScript → dist/
+  - name: node:22
+    entrypoint: npm
+    args: ["run", "build"]
+    volumes:
+      - name: npm-cache
+        path: /root/.npm
+
+  # 4. Deploy to App Engine
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy", "app.yaml"]
+    timeout: "1200s"
+
+timeout: "1900s"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

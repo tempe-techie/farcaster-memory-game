@@ -1,0 +1,25 @@
+{
+  "name": "farcaster-memory-game",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "SKIP_JFS_VERIFICATION=true tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/src/server.js"
+  },
+  "dependencies": {
+    "@farcaster/snap": "^2.0.1",
+    "@farcaster/snap-hono": "^2.0.1",
+    "@farcaster/snap-turso": "^2.0.1",
+    "@hono/node-server": "^1.19.13",
+    "@noble/curves": "^2.0.0",
+    "hono": "^4.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
