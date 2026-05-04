@@ -170,6 +170,7 @@ function applyClick(state: GameState, clicked: number, ts: number): GameState {
 function renderGame(base: string, state: GameState): SnapHandlerResult {
   const target = `${base}${SNAP_PATH}${encodeState(state)}`;
   const restartTarget = `${base}${SNAP_PATH}?reset=1`;
+  const shareUrl = `${base}${HOME_PATH}`;
   const matchedCount = countSetBits(state.m) / 2;
 
   const elapsedLabel =
@@ -179,7 +180,7 @@ function renderGame(base: string, state: GameState): SnapHandlerResult {
     page: {
       type: "stack",
       props: { gap: "md" },
-      children: ["title", "subtitle", "status", "grid", "restart"],
+      children: ["title", "subtitle", "status", "grid", "actions"],
     },
     title: {
       type: "text",
@@ -217,6 +218,11 @@ function renderGame(base: string, state: GameState): SnapHandlerResult {
         },
       },
     },
+    actions: {
+      type: "stack",
+      props: { direction: "horizontal", gap: "sm" },
+      children: ["restart", "share"],
+    },
     restart: {
       type: "button",
       props: { label: "Restart", variant: "secondary" },
@@ -224,6 +230,19 @@ function renderGame(base: string, state: GameState): SnapHandlerResult {
         press: {
           action: "submit",
           params: { target: restartTarget },
+        },
+      },
+    },
+    share: {
+      type: "button",
+      props: { label: "Share", variant: "secondary", icon: "share" },
+      on: {
+        press: {
+          action: "compose_cast",
+          params: {
+            text: "I'm playing the Farcaster Memory Game! Can you beat me?",
+            embeds: [shareUrl],
+          },
         },
       },
     },
@@ -239,12 +258,14 @@ function renderGame(base: string, state: GameState): SnapHandlerResult {
 function renderWin(base: string, state: GameState, endTs: number): SnapHandlerResult {
   const elapsed = state.t0 === null ? 0 : Math.max(0, endTs - state.t0);
   const playAgainTarget = `${base}${SNAP_PATH}?reset=1`;
+  const shareUrl = `${base}${HOME_PATH}`;
+  const elapsedLabel = formatElapsed(elapsed);
 
   const elements: Record<string, SnapElementInput> = {
     page: {
       type: "stack",
       props: { gap: "md" },
-      children: ["title", "time", "subtitle", "again"],
+      children: ["title", "time", "subtitle", "actions"],
     },
     title: {
       type: "text",
@@ -253,7 +274,7 @@ function renderWin(base: string, state: GameState, endTs: number): SnapHandlerRe
     time: {
       type: "text",
       props: {
-        content: `Time: ${formatElapsed(elapsed)}`,
+        content: `Time: ${elapsedLabel}`,
         weight: "bold",
         align: "center",
       },
@@ -266,6 +287,11 @@ function renderWin(base: string, state: GameState, endTs: number): SnapHandlerRe
         align: "center",
       },
     },
+    actions: {
+      type: "stack",
+      props: { direction: "horizontal", gap: "sm" },
+      children: ["again", "share"],
+    },
     again: {
       type: "button",
       props: { label: "Play again", variant: "primary" },
@@ -273,6 +299,19 @@ function renderWin(base: string, state: GameState, endTs: number): SnapHandlerRe
         press: {
           action: "submit",
           params: { target: playAgainTarget },
+        },
+      },
+    },
+    share: {
+      type: "button",
+      props: { label: "Share", variant: "secondary", icon: "share" },
+      on: {
+        press: {
+          action: "compose_cast",
+          params: {
+            text: `I have completed the Farcaster memory game in ${elapsedLabel} - can you beat me?`,
+            embeds: [shareUrl],
+          },
         },
       },
     },
