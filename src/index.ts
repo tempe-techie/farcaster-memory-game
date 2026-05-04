@@ -241,7 +241,7 @@ function renderGame(base: string, state: GameState): SnapHandlerResult {
         press: {
           action: "compose_cast",
           params: {
-            text: "I'm playing the Farcaster Memory Game! Can you beat me? (cc @tempetechie)",
+            text: "I'm playing the Farcaster Memory Game! Can you beat me? (cc @tempetechie.eth)",
             embeds: [shareUrl],
           },
         },
@@ -310,7 +310,7 @@ function renderWin(base: string, state: GameState, endTs: number): SnapHandlerRe
         press: {
           action: "compose_cast",
           params: {
-            text: `I have completed the Farcaster memory game in ${elapsedLabel} - can you beat me? (cc @tempetechie)`,
+            text: `I have completed the Farcaster memory game in ${elapsedLabel} - can you beat me? (cc @tempetechie.eth)`,
             embeds: [shareUrl],
           },
         },
